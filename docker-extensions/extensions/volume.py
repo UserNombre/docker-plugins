@@ -1,9 +1,4 @@
-@click.group()
-def volume():
-    """Volume entrypoint"""
-    pass
-
-def volume_exists(volume)
+def volume_exists(volume):
     try:
         client.volumes.get(volume)
     except docker.errors.NotFound:
@@ -11,19 +6,16 @@ def volume_exists(volume)
 
     return True
 
-@volume.command()
-@click.argument("source")
-@click.argument("destination")
-def clone(source, destination):
-    if not volume_exists(source):
-        print(f"Source volume {source} doest not exist")
+def clone(src, dst):
+    if not volume_exists(src):
+        print(f"Source volume {src} doest not exist")
         return 1
-    elif volume_exists(destination):
-        print(f"Destination volume {destination} already exists")
+    elif volume_exists(dst):
+        print(f"Destination volume {dst} already exists")
         return 1
 
-    src_vol = client.volumes.get(source)
-    dst_vol = client.volumes.create(source)
+    src_vol = client.volumes.get(src)
+    dst_vol = client.volumes.create(dst)
 
     try:
         client.containers.run("alpine", "cp -r /src /dst", \
@@ -34,9 +26,6 @@ def clone(source, destination):
 
     return 0
 
-@volumes.command()
-@click.argument("source")
-@click.argument("destination")
 def rename(source, destination):
     print("Rename")
     return 0

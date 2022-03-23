@@ -1,0 +1,2 @@
+[console_scripts]
+docker-extensions = extensions.cli:main
