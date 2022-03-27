@@ -1,24 +1,40 @@
 import click
+import sys
+
+metadata_command = "docker-cli-plugin-metadata"
+plugin_name = "extensions"
 
 from .. import __version__
 from .. import volume as vol
 
-@click.group()
 def main():
-    """Entrypoint"""
+    if len(sys.argv) < 2 or sys.argv[1] not in [metadata_command, plugin_name]:
+        extensions()
+    else:
+        sys.argv[0] = "docker"
+        cli()
+
+@click.group()
+def cli():
+    """Docker CLI entrypoint"""
     pass
 
-@main.command()
+@cli.command()
 def docker_cli_plugin_metadata():
+    """Docker CLI pugin metadata helper"""
     print('{{"SchemaVersion":"0.1.0",'
-          '"Vendor":"-",'
+          '"Vendor":"None Inc.",'
           '"Version":"{}",'
-          '"ShortDescription":"Additional commands"}}'
+          '"ShortDescription":"Docker CLI extensions"}}'
             .format(__version__))
+
+@cli.group()
+def extensions():
+    """Docker CLI extensions"""
 
 ##### Volume commands
 
-@main.group()
+@extensions.group()
 def volume():
     """Volume entrypoint"""
     pass
