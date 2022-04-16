@@ -68,25 +68,26 @@ def volume():
     """Volume entrypoint"""
 
 @volume.command()
-@click.argument("volume_scheme")
+@click.argument("volume")
 @click.option("-r", "--recursive", is_flag=True)
-def list(volume_scheme, recursive):
-    log.debug("Executing list")
-    return vol.list(volume_scheme, recursive)
+def ls(volume, recursive):
+    log.debug("Executing ls")
+    return vol.ls(volume, recursive)
 
 @volume.command()
-@click.argument("volume_scheme")
-@click.argument("system_path")
-def get(volume_scheme, system_path):
+@click.argument("volume")
+@click.argument("file")
+def get(volume, file):
     log.debug("Executing get")
-    return vol.get(volume_scheme, system_path)
+    return vol.get(volume, file)
 
 @volume.command()
-@click.argument("volume_scheme")
-@click.argument("system_path")
-def put(volume_scheme, system_path):
+@click.argument("volume")
+@click.argument("file")
+@click.option("-T", "--no-target-directory", is_flag=True)
+def put(volume, file, no_target_directory):
     log.debug("Executing put")
-    return vol.put(volume_scheme, system_path)
+    return vol.put(volume, file, no_target_directory)
 
 @volume.command()
 @click.argument("source")
