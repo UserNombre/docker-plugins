@@ -51,7 +51,7 @@ def get(volume, destination):
                 member.path = Path(*path.parts[1:])
             tar.extractall(dst_path, members=members)
 
-def put(volume, source, no_target_directory):
+def put(volume, source, target_directory):
     root_path = "/volume"
     volume_name = volume_get_name(volume)
     volume_path = volume_get_path(volume, root_path)
@@ -64,7 +64,7 @@ def put(volume, source, no_target_directory):
     # Use a byte stream to avoid creating a file in disk
     stream = BytesIO()
     with tarfile.open(fileobj=stream, mode='w') as tar:
-        if not src_path.is_dir() or not no_target_directory:
+        if not src_path.is_dir() or target_directory:
             tar.add(src_path, arcname=src_path.parts[-1])
         else:
             for path in src_path.iterdir():

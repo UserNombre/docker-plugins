@@ -5,9 +5,11 @@ import sys
 from docker.errors import *
 
 from .. import __version__
-from .. import volume as vol
+from . import volume
+from . import container
 
 log = logging.getLogger(__name__)
+
 metadata_command = "docker-cli-plugin-metadata"
 plugin_name = "extensions"
 
@@ -52,53 +54,14 @@ def docker_cli_plugin_metadata():
           '"Vendor":"None Inc.",'
           '"Version":"{}",'
           '"ShortDescription":"Docker CLI extensions"}}'
-            .format(__version__))
+          .format(__version__))
 
 @cli.group()
 @click.option("-l", "--log-level", type=click.Choice(
-    ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]))
+              ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]))
 def extensions(log_level):
     """Docker CLI extensions"""
     setup_logging(log_level)
 
-##### Volume commands
-
-@extensions.group()
-def volume():
-    """Volume entrypoint"""
-
-@volume.command()
-@click.argument("volume")
-@click.option("-r", "--recursive", is_flag=True)
-def ls(volume, recursive):
-    log.debug("Executing ls")
-    return vol.ls(volume, recursive)
-
-@volume.command()
-@click.argument("volume")
-@click.argument("file")
-def get(volume, file):
-    log.debug("Executing get")
-    return vol.get(volume, file)
-
-@volume.command()
-@click.argument("volume")
-@click.argument("file")
-@click.option("-T", "--no-target-directory", is_flag=True)
-def put(volume, file, no_target_directory):
-    log.debug("Executing put")
-    return vol.put(volume, file, no_target_directory)
-
-@volume.command()
-@click.argument("source")
-@click.argument("destination")
-def clone(source, destination):
-    log.debug("Executing clone")
-    return vol.clone(source, destination)
-
-@volume.command()
-@click.argument("source")
-@click.argument("destination")
-def rename(source, destination):
-    log.debug("Executing rename")
-    return vol.rename(source, destination)
+extensions.add_command(volume.volume)
+extensions.add_command(container.container)
