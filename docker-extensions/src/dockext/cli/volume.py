@@ -20,10 +20,12 @@ def ls(volume, recursive):
 @volume.command()
 @click.argument("volume")
 @click.argument("file")
-def get(volume, file):
+@click.option("-t/-T", "--target-directory/--no-target-directory",
+              is_flag=True, default=False)
+def get(volume, file, target_directory):
     """Copy files from a volume to the host"""
     log.debug("Executing get")
-    return vol.get(volume, file)
+    return vol.get(volume, file, target_directory)
 
 @volume.command()
 @click.argument("volume")

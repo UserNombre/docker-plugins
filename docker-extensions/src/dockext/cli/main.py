@@ -1,5 +1,6 @@
 import click
 import logging
+import traceback
 import sys
 
 from docker.errors import *
@@ -24,7 +25,8 @@ def main():
     except (NotFound, ContainerError) as e:
         xlog(e)
     except Exception as e:
-        xlog(e)
+        traceback.print_exception(type(e), e, e.__traceback__)
+        sys.exit(1)
 
 def setup_logging(log_level):
     if not log_level:
