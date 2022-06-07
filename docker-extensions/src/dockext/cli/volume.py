@@ -40,10 +40,11 @@ def put(volume, file, target_directory):
 @volume.command()
 @click.argument("source")
 @click.argument("destination")
-def clone(source, destination):
+@click.option("-f", "--force", is_flag=True, default=False)
+def clone(source, destination, force):
     """Clone a volume"""
     log.debug("Executing clone")
-    return vol.clone(source, destination)
+    return vol.clone(source, destination, force)
 
 @volume.command()
 @click.argument("source")

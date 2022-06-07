@@ -86,10 +86,10 @@ def put(volume, source, target_directory):
 
     container.remove(force=True)
 
-def clone(source, destination):
+def clone(source, destination, force=False):
     if not _volume_exists(source):
         raise NotFound(f"Volume '{source}' does not exist")
-    elif _volume_exists(destination):
+    elif not force and _volume_exists(destination):
         raise Exception(f"Volume '{destination}' already exists")
 
     client.containers.run("alpine", f"cp -r -T /src /dst",
